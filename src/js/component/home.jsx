@@ -1,9 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 
 
 import { SecondsCounter } from "./SecondsCounter";
 import { Button } from "./button";
 import { Modal } from "./modal";
+import { ThemeMenu } from "./themeMenu";
+import { ThemeContext } from "../../context/themeContext";
+
 
 
 //create your first component
@@ -14,6 +17,7 @@ const Home = () => {
 	const [intervalId, setIntervalId] = useState(0);
 	const [isReverse, setIsReverse] = useState(false);
 	const [modalMessage, setModalMessage] = useState("");
+	const {themeApp, setThemeApp} = useContext(ThemeContext)
 	const inputRef = useRef()
 
 	const handleReset = () => {
@@ -24,7 +28,7 @@ const Home = () => {
 	}
 
 	const handleReverse = () => {	
-
+		
 		const time = Number(inputRef.current.value)
 
 		if (time <= 0 || typeof time !== "number") {
@@ -85,11 +89,16 @@ const Home = () => {
 
 	useEffect(() => {
 		!isPlaying 
-		? document.querySelector('body').classList.add('stop')
-		: document.querySelector('body').classList.remove('stop')
+		? document.querySelector('body').className =`theme ${themeApp}`
+		: document.querySelector('body').className=``
 		handlePlay()
 		return clearInterval(intervalId)
-	}, [isPlaying, isReverse]);
+	}, [isPlaying, isReverse,themeApp]);
+
+	const handleChangeTheme = (theme) => {
+		setThemeApp(theme)
+		localStorage.setItem("theme", theme)		
+	}
 	
 	return (
 		<>
@@ -114,7 +123,8 @@ const Home = () => {
 					placeholder="Countdown time"
 					min={1}
 				/>
-			</div>			
+			</div>
+			<ThemeMenu changeTheme={handleChangeTheme} isPlaying={isPlaying}/>
 		</>
 	);
 };

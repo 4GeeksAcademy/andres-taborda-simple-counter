@@ -10,28 +10,50 @@
 
 */
 
-.stop {
-    background-color: #212529;
+:root {
+    --primary: #212529;
+    --secondary: #4E81AA;
+    --tertiary: #aa4e4e;
+}
+
+body {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
     transition: 0.20s ease-in;
+}
+
+.theme.primary {
+    background-color: var(--primary);
+
+}
+
+
+
+.theme.secondary {
+    background-color: var(--secondary);
+
+}
+
+.theme.tertiary {
+    background-color: var(--tertiary);
+
 }
 
 .valueContainer {
     padding: 15px 30px;
     font-size: 5rem;
-    border: none;
-    outline: none;
-    border-radius: 6px;
-    color: #fff;
-    background-color: transparent;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 1),
-        -1px -1px 6px rgba(255, 255, 255, 0.4);
+    border-radius: 30px;
+    background: lightgrey;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 50px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
 }
 
 .valueContainer>svg {
     vertical-align: baseline;
 }
 
-.actions-counter {
+.actions-counter,
+.theme-button {
     font: inherit;
     background-color: #f0f0f0;
     border: 0;
@@ -48,7 +70,8 @@
     cursor: pointer;
 }
 
-.actions-counter:active {
+.actions-counter:active,
+.theme-button:active {
     translate: 0 0.225em;
     box-shadow: inset 0 0.03em 0 0 #f4f4f4, 0 0.03em 0 0 #efefef,
         0 0.0625em 0 0 #ececec, 0 0.125em 0 0 #e0e0e0, 0 0.125em 0 0 #dedede,
@@ -61,7 +84,17 @@
     text-shadow: none;
 }
 
+.btn-theme-primary {
+    background-color: #212529;
+}
 
+.btn-theme-secondary {
+    background-color: #4E81AA;
+}
+
+.btn-theme-tertiary {
+    background-color: #aa4e4e;
+}
 
 input:focus {
     outline-color: rgb(65, 65, 65);

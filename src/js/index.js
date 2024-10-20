@@ -7,7 +7,12 @@ import "../styles/index.css";
 
 //import your own components
 import Home from "./component/home.jsx";
+import { ThemeProvider } from "../context/themeContext.jsx";
 
 //render your react application
-ReactDOM.createRoot(document.getElementById('app')).render(<Home/>);
+ReactDOM.createRoot(document.getElementById('app')).render(
+  <ThemeProvider>
+    <Home/>
+  </ThemeProvider>
+);
 
