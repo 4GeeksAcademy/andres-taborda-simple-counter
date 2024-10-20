@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { SecondsCounter } from "./SecondsCounter";
 import { Button } from "./button";
+import { Modal } from "./modal";
 
 
 //create your first component
@@ -12,66 +13,87 @@ const Home = () => {
 	const [isPlaying, setIsPlaying] = useState(true);
 	const [intervalId, setIntervalId] = useState(0);
 	const [isReverse, setIsReverse] = useState(false);
+	const [modalMessage, setModalMessage] = useState("");
 	const inputRef = useRef()
 
 	const handleReset = () => {
-		console.log(isReverse);
-		!isReverse ? setSeconds(0) : setSeconds(inputRef.current.value)
+		setSeconds(0)
 		setIsPlaying(true)
+		setIsReverse(false)
+		inputRef.current.value = ""
 	}
 
 	const handleReverse = () => {	
-		
-			
+
 		const time = Number(inputRef.current.value)
-		if (time > 0 && typeof time === "number") {
-			setSeconds(time)
-			setIsReverse(true)
-			setIsPlaying(true)
+
+		if (time <= 0 || typeof time !== "number") {
+			showModal("Please enter a valid time")
+			return
 		}
 		
-	}
-	const start = () => {
+		setSeconds(time)
+		setIsReverse(true)
 		setIsPlaying(true)
 	}
 
-	const pause = () => {
+	const start = () => {
+		setIsPlaying(true)
+		
+	}
+
+	const stopCounter = () => {
 		clearInterval(intervalId)
 		setIsPlaying(false)
+		
+	}
+
+	const showModal = (message) => {
+		setModalMessage(message)
+		const btnModal = document.getElementById('modalButton')
+		btnModal.click()
 	}
 
 	const handlePlay = () => {		
-					
-		if (isPlaying) {
-
+				
+		if (isPlaying && isReverse) {
 			setIntervalId(
 				setInterval(() => {					
 					setSeconds(prev => {
 
-						if (isReverse && prev === 0) {
-							pause()
-							return prev
-						}
-						if (isReverse && prev > 0) {							
+						if (prev > 0) {							
 							return prev - 1
-						}
-						if (!isReverse) {
-							return prev + 1
-						}
+						}												
+						stopCounter()
+						showModal("Your Time Is Up")
+						return inputRef.current.value
+						
 					})					
 				}, 1000)
 			)
+			return
 		}
-		
+
+		if (isPlaying) {
+			setIntervalId(
+				setInterval(() => {					
+					setSeconds(prev =>  prev + 1)				
+				}, 1000)
+			)
+		}
 	}
 
 	useEffect(() => {
+		!isPlaying 
+		? document.querySelector('body').classList.add('stop')
+		: document.querySelector('body').classList.remove('stop')
 		handlePlay()
 		return clearInterval(intervalId)
 	}, [isPlaying, isReverse]);
 	
 	return (
 		<>
+			<Modal message={modalMessage}/>
 			<SecondsCounter seconds={seconds} />
 			<div className="container d-grid justify-content-center gap-5 p-5">
 				<Button 
@@ -81,16 +103,18 @@ const Home = () => {
 				/>
 				<Button 
 					description={isPlaying ? "Pause" : "Start"} 
-					action={isPlaying ? pause : start}
+					action={isPlaying ? stopCounter : start}
 					currentIcon={isPlaying ? "PAUSE" : "PLAY"}
 				/>
 				<input 
+					className="actions-counter"
 					ref={inputRef} 
 					type="number" 
 					onChange={handleReverse} 
 					placeholder="Countdown time"
+					min={1}
 				/>
-			</div>
+			</div>			
 		</>
 	);
 };
